@@ -1,68 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work Order – GigsTM Gig Partner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        .agreement-block {
+            width: 100%;
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background: rgba(245,248,255,0.7);
+            border-radius: 12px;
+            padding: 16px 12px 10px 12px;
+            margin-top: 16px;
+            box-shadow: 0 1px 5px rgba(44,77,143,0.04);
+        }
+
+        .agreement-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+            
+        }
+
+        .agreement-row label {
+            margin-left: -20px;
+            font-weight: 400;
+        }
+
+        #signatureContainer {
+            width: 100%;
+            margin-bottom: 12px;
+            flex-direction: column;
+            align-items: flex-start;
+            background: #f7faff;
+            border-radius: 10px;
+            padding: 14px 10px 10px 10px;
+            box-shadow: 0 1px 5px rgba(44,77,143,0.03);
+            border: 1px solid #e2e6f3;
+        }
+
+        #signaturePad {
+            width: 100%;
+            max-width: 320px;
+            min-width: 220px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(44,77,143,0.07);
+        }
+
+        #submitBtn {
+            background: linear-gradient(90deg, #2a4d8f 70%, #3c7be6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 0;
+            font-size: 1.12em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            width: 100%;
+            box-shadow: 0 4px 16px rgba(44,77,143,0.10);
+            letter-spacing: 0.025em;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        #submitBtn:hover {
+            background: linear-gradient(90deg, #3c7be6 0%, #2a4d8f 100%);
+            box-shadow: 0 7px 24px rgba(44,77,143,0.17);
+            transform: translateY(-2px) scale(1.03);
+        }
+        #submitBtn:active {
+            background: #204073;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f8f9fa;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8ecfc 0%, #f7f9fd 100%);
+            min-height: 100vh;
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 900px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            padding: 32px 24px;
+            margin: 48px auto 24px auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 22px;
+            box-shadow: 0 6px 28px rgba(44,77,143,0.13);
+            padding: 36px 28px;
             display: flex;
             gap: 40px;
+            transition: all 0.3s cubic-bezier(.4,0,.2,1);
         }
+
         .form-section {
             flex: 1;
         }
+
         .letter-section {
             flex: 2;
-            background: #f4f6fa;
-            border-radius: 8px;
-            padding: 24px 20px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px 28px;
             min-width: 320px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 12px rgba(44,77,143,0.07);
+            border: 1.5px solid #e2e6f3;
         }
+
         label {
             display: block;
             margin-bottom: 6px;
             font-weight: 500;
         }
-        input, select {
+
+        input,
+        select {
             width: 100%;
-            padding: 8px 10px;
-            margin-bottom: 18px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            border: 1.5px solid #e2e6f3;
+            border-radius: 8px;
+            font-size: 1.08rem;
+            background: #f9fafd;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 3px rgba(44,77,143,0.03);
         }
+        input:focus, select:focus {
+            border-color: #3c7be6;
+            outline: none;
+            box-shadow: 0 0 0 2px #e8ecfc;
+        }
+
         .letter {
             white-space: pre-line;
             font-size: 1.1rem;
             color: #222;
         }
+
         .letter-title {
-            font-size: 1.3rem;
-            font-weight: bold;
+            font-size: 1.35rem;
+            font-weight: 600;
             margin-bottom: 18px;
             color: #2a4d8f;
+            letter-spacing: 0.01em;
         }
+
         @media (max-width: 900px) {
             .container {
                 flex-direction: column;
                 gap: 24px;
+                padding: 20px 4vw;
+            }
+            .form-section, .letter-section {
+                min-width: 0;
+                width: 100%;
+                padding: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+                margin: 0;
+                background: #f8f9fa;
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 0;
+                margin: 0;
+            }
+            .form-section, .letter-section {
+                padding: 0 2vw;
+                min-width: 0;
+                width: 100%;
+            }
+            .letter-section {
+                padding: 14px 2vw;
+            }
+            .letter-title {
+                font-size: 1.05rem;
+            }
+            input, select, button, #signaturePad {
+                font-size: 1em;
+                min-height: 44px;
+                box-sizing: border-box;
+            }
+            #signaturePad {
+                min-width: 0;
+                width: 100%;
+                max-width: 100vw;
+                height: 70px;
+            }
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 0;
+                gap: 10px;
+            }
+            .form-section, .letter-section {
+                padding: 0 1vw;
+            }
+            .letter-section {
+                padding: 10px 1vw;
+            }
+            .agreement-block, #signatureContainer {
+                padding: 8px 2vw 6px 2vw;
+            }
+            #signaturePad {
+                height: 48px;
+            }
+            .letter-title {
+                font-size: 0.98rem;
+            }
+            input, select, button {
+                font-size: 0.98em;
+                min-height: 38px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="form-section">
@@ -93,38 +260,42 @@
                     <option>Field Sales</option>
                     <option>Other Gig Role</option>
                 </select>
-                <div style="margin-bottom: 16px;">
-                    <input type="checkbox" id="acceptAgreement">
-                    <label for="acceptAgreement" style="display:inline;font-weight:400;">I accept the agreement</label>
+                <div class="agreement-block">
+                    <div class="agreement-row">
+                        <input type="checkbox" id="acceptAgreement">
+                        <label for="acceptAgreement">I accept the agreement</label>
+                    </div>
+                    <div id="signatureContainer" class="hidden">
+                        <label style="font-weight:500;">Digital Signature</label><br>
+                        <canvas id="signaturePad" width="320" height="100"
+                            style="border:1px solid #bbb; border-radius:4px; background:#fff; cursor:crosshair;"></canvas>
+                        <button type="button" id="clearSignature" style="margin-left:10px;">Clear</button>
+                        <div id="signatureError" style="color:#d00; font-size:0.95em; margin-top:4px; display:none;">
+                            Please provide your signature.</div>
+                    </div>
+                    <button type="submit" id="submitBtn" class="hidden">Submit</button>
                 </div>
-                <div id="signatureContainer" style="display:none; margin-bottom: 16px;">
-                    <label style="font-weight:500;">Digital Signature</label><br>
-                    <canvas id="signaturePad" width="320" height="100" style="border:1px solid #bbb; border-radius:4px; background:#fff; cursor:crosshair;"></canvas>
-                    <button type="button" id="clearSignature" style="margin-left:10px;">Clear</button>
-                    <div id="signatureError" style="color:#d00; font-size:0.95em; margin-top:4px; display:none;">Please provide your signature.</div>
-                </div>
-                <button type="submit" id="submitBtn" style="display:none; background:#2a4d8f; color:#fff; border:none; border-radius:4px; padding:10px 22px; font-size:1.05em; font-weight:500; cursor:pointer;">Submit</button>
             </form>
         </div>
         <div class="letter-section">
             <div class="letter-title">Work Order – GigsTM Gig Partner</div>
             <div class="letter" id="letterPreview">
                 Work Order Number: GIGSTM/WO/[UNIQUE-ID]
-Date: [Insert Date, e.g., 12/07/2025]
-Gig Partner Name: [Full Name]
-Partner Code: GTM[Code]
-Location Assigned: [City/Town, e.g., Jhansi]
-Aadhaar / GST: [Details]
-Role: Seller Acquisition / Field Sales / [Other Gig Role]
+                Date: [Insert Date, e.g., 12/07/2025]
+                Gig Partner Name: [Full Name]
+                Partner Code: GTM[Code]
+                Location Assigned: [City/Town, e.g., Jhansi]
+                Aadhaar / GST: [Details]
+                Role: Seller Acquisition / Field Sales / [Other Gig Role]
             </div>
         </div>
     </div>
     <script>
         const form = document.getElementById('workOrderForm');
         const preview = document.getElementById('letterPreview');
-        
+
         // Set today's date as default
-        document.getElementById('date').value = new Date().toISOString().slice(0,10);
+        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
 
         function updatePreview() {
             const workOrderNumber = document.getElementById('workOrderNumber').value || 'GIGSTM/WO/[UNIQUE-ID]';
@@ -136,7 +307,7 @@ Role: Seller Acquisition / Field Sales / [Other Gig Role]
             const role = document.getElementById('role').value || '[Other Gig Role]';
 
             preview.textContent =
-`Work Order Number: ${workOrderNumber}
+                `Work Order Number: ${workOrderNumber}
 Date: ${date}
 Gig Partner Name: ${gigPartnerName}
 Partner Code: ${partnerCode}
@@ -158,16 +329,19 @@ Role: ${role}`;
         let drawing = false, hasSignature = false;
 
         function showSignaturePad(show) {
-            signatureContainer.style.display = show ? '' : 'none';
-            submitBtn.style.display = show ? '' : 'none';
-            if (!show) {
+            if (show) {
+                signatureContainer.classList.remove('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                signatureContainer.classList.add('hidden');
+                submitBtn.classList.add('hidden');
                 clearPad();
                 hasSignature = false;
                 submitBtn.disabled = true;
             }
         }
 
-        acceptAgreement.addEventListener('change', function() {
+        acceptAgreement.addEventListener('change', function () {
             showSignaturePad(this.checked);
         });
 
@@ -181,13 +355,13 @@ Role: ${role}`;
         clearSignature.addEventListener('click', clearPad);
 
         // Drawing logic
-        signaturePad.addEventListener('mousedown', function(e) {
+        signaturePad.addEventListener('mousedown', function (e) {
             drawing = true;
             const ctx = signaturePad.getContext('2d');
             ctx.beginPath();
             ctx.moveTo(e.offsetX, e.offsetY);
         });
-        signaturePad.addEventListener('mousemove', function(e) {
+        signaturePad.addEventListener('mousemove', function (e) {
             if (!drawing) return;
             const ctx = signaturePad.getContext('2d');
             ctx.lineTo(e.offsetX, e.offsetY);
@@ -195,11 +369,11 @@ Role: ${role}`;
             hasSignature = true;
             submitBtn.disabled = false;
         });
-        window.addEventListener('mouseup', function() {
+        window.addEventListener('mouseup', function () {
             drawing = false;
         });
         // Touch support
-        signaturePad.addEventListener('touchstart', function(e) {
+        signaturePad.addEventListener('touchstart', function (e) {
             e.preventDefault();
             drawing = true;
             const rect = signaturePad.getBoundingClientRect();
@@ -208,7 +382,7 @@ Role: ${role}`;
             ctx.beginPath();
             ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
         });
-        signaturePad.addEventListener('touchmove', function(e) {
+        signaturePad.addEventListener('touchmove', function (e) {
             e.preventDefault();
             if (!drawing) return;
             const rect = signaturePad.getBoundingClientRect();
@@ -219,12 +393,12 @@ Role: ${role}`;
             hasSignature = true;
             submitBtn.disabled = false;
         });
-        window.addEventListener('touchend', function() {
+        window.addEventListener('touchend', function () {
             drawing = false;
         });
 
         // Prevent submit unless signature is present
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             if (acceptAgreement.checked && !hasSignature) {
                 e.preventDefault();
                 signatureError.style.display = '';
@@ -237,4 +411,5 @@ Role: ${role}`;
         });
     </script>
 </body>
+
 </html>

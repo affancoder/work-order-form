@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Order – GigsTM Gig Partner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 32px 24px;
+            display: flex;
+            gap: 40px;
+        }
+        .form-section {
+            flex: 1;
+        }
+        .letter-section {
+            flex: 2;
+            background: #f4f6fa;
+            border-radius: 8px;
+            padding: 24px 20px;
+            min-width: 320px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .letter {
+            white-space: pre-line;
+            font-size: 1.1rem;
+            color: #222;
+        }
+        .letter-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #2a4d8f;
+        }
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h2>Work Order Details</h2>
+            <form id="workOrderForm" autocomplete="off">
+                <label for="workOrderNumber">Work Order Number</label>
+                <input type="text" id="workOrderNumber" placeholder="e.g., GIGSTM/WO/12345" required>
+
+                <label for="date">Date</label>
+                <input type="date" id="date" required>
+
+                <label for="gigPartnerName">Gig Partner Name</label>
+                <input type="text" id="gigPartnerName" placeholder="Full Name" required>
+
+                <label for="partnerCode">Partner Code</label>
+                <input type="text" id="partnerCode" placeholder="e.g., GTM123" required>
+
+                <label for="location">Location Assigned</label>
+                <input type="text" id="location" placeholder="e.g., Jhansi" required>
+
+                <label for="aadhaar">Aadhaar / GST</label>
+                <input type="text" id="aadhaar" placeholder="Aadhaar or GST Details" required>
+
+                <label for="role">Role</label>
+                <select id="role" required>
+                    <option value="">-- Select Role --</option>
+                    <option>Seller Acquisition</option>
+                    <option>Field Sales</option>
+                    <option>Other Gig Role</option>
+                </select>
+                <div style="margin-bottom: 16px;">
+                    <input type="checkbox" id="acceptAgreement">
+                    <label for="acceptAgreement" style="display:inline;font-weight:400;">I accept the agreement</label>
+                </div>
+                <div id="signatureContainer" style="display:none; margin-bottom: 16px;">
+                    <label style="font-weight:500;">Digital Signature</label><br>
+                    <canvas id="signaturePad" width="320" height="100" style="border:1px solid #bbb; border-radius:4px; background:#fff; cursor:crosshair;"></canvas>
+                    <button type="button" id="clearSignature" style="margin-left:10px;">Clear</button>
+                    <div id="signatureError" style="color:#d00; font-size:0.95em; margin-top:4px; display:none;">Please provide your signature.</div>
+                </div>
+                <button type="submit" id="submitBtn" style="display:none; background:#2a4d8f; color:#fff; border:none; border-radius:4px; padding:10px 22px; font-size:1.05em; font-weight:500; cursor:pointer;">Submit</button>
+            </form>
+        </div>
+        <div class="letter-section">
+            <div class="letter-title">Work Order – GigsTM Gig Partner</div>
+            <div class="letter" id="letterPreview">
+                Work Order Number: GIGSTM/WO/[UNIQUE-ID]
+Date: [Insert Date, e.g., 12/07/2025]
+Gig Partner Name: [Full Name]
+Partner Code: GTM[Code]
+Location Assigned: [City/Town, e.g., Jhansi]
+Aadhaar / GST: [Details]
+Role: Seller Acquisition / Field Sales / [Other Gig Role]
+            </div>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('workOrderForm');
+        const preview = document.getElementById('letterPreview');
+        
+        // Set today's date as default
+        document.getElementById('date').value = new Date().toISOString().slice(0,10);
+
+        function updatePreview() {
+            const workOrderNumber = document.getElementById('workOrderNumber').value || 'GIGSTM/WO/[UNIQUE-ID]';
+            const date = document.getElementById('date').value || '[Insert Date, e.g., 12/07/2025]';
+            const gigPartnerName = document.getElementById('gigPartnerName').value || '[Full Name]';
+            const partnerCode = document.getElementById('partnerCode').value || '[Code]';
+            const location = document.getElementById('location').value || '[City/Town, e.g., Jhansi]';
+            const aadhaar = document.getElementById('aadhaar').value || '[Details]';
+            const role = document.getElementById('role').value || '[Other Gig Role]';
+
+            preview.textContent =
+`Work Order Number: ${workOrderNumber}
+Date: ${date}
+Gig Partner Name: ${gigPartnerName}
+Partner Code: ${partnerCode}
+Location Assigned: ${location}
+Aadhaar / GST: ${aadhaar}
+Role: ${role}`;
+        }
+
+        form.addEventListener('input', updatePreview);
+        // Initial preview update
+        updatePreview();
+        // --- Digital Signature Logic ---
+        const acceptAgreement = document.getElementById('acceptAgreement');
+        const signatureContainer = document.getElementById('signatureContainer');
+        const signaturePad = document.getElementById('signaturePad');
+        const clearSignature = document.getElementById('clearSignature');
+        const submitBtn = document.getElementById('submitBtn');
+        const signatureError = document.getElementById('signatureError');
+        let drawing = false, hasSignature = false;
+
+        function showSignaturePad(show) {
+            signatureContainer.style.display = show ? '' : 'none';
+            submitBtn.style.display = show ? '' : 'none';
+            if (!show) {
+                clearPad();
+                hasSignature = false;
+                submitBtn.disabled = true;
+            }
+        }
+
+        acceptAgreement.addEventListener('change', function() {
+            showSignaturePad(this.checked);
+        });
+
+        function clearPad() {
+            const ctx = signaturePad.getContext('2d');
+            ctx.clearRect(0, 0, signaturePad.width, signaturePad.height);
+            hasSignature = false;
+            submitBtn.disabled = true;
+            signatureError.style.display = 'none';
+        }
+        clearSignature.addEventListener('click', clearPad);
+
+        // Drawing logic
+        signaturePad.addEventListener('mousedown', function(e) {
+            drawing = true;
+            const ctx = signaturePad.getContext('2d');
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+        signaturePad.addEventListener('mousemove', function(e) {
+            if (!drawing) return;
+            const ctx = signaturePad.getContext('2d');
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+            hasSignature = true;
+            submitBtn.disabled = false;
+        });
+        window.addEventListener('mouseup', function() {
+            drawing = false;
+        });
+        // Touch support
+        signaturePad.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            drawing = true;
+            const rect = signaturePad.getBoundingClientRect();
+            const ctx = signaturePad.getContext('2d');
+            const touch = e.touches[0];
+            ctx.beginPath();
+            ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        });
+        signaturePad.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            if (!drawing) return;
+            const rect = signaturePad.getBoundingClientRect();
+            const ctx = signaturePad.getContext('2d');
+            const touch = e.touches[0];
+            ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            ctx.stroke();
+            hasSignature = true;
+            submitBtn.disabled = false;
+        });
+        window.addEventListener('touchend', function() {
+            drawing = false;
+        });
+
+        // Prevent submit unless signature is present
+        form.addEventListener('submit', function(e) {
+            if (acceptAgreement.checked && !hasSignature) {
+                e.preventDefault();
+                signatureError.style.display = '';
+            } else {
+                signatureError.style.display = 'none';
+                alert('Form submitted successfully!');
+                // Here you can handle the form data and signature image (signaturePad.toDataURL())
+                e.preventDefault(); // Remove this line to allow actual submission
+            }
+        });
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@
     <title>Work Order – GigsTM Gig Partner</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        .hidden { display: none !important; }
         .agreement-block {
             width: 100%;
             margin-bottom: 0;
@@ -228,6 +229,8 @@
             }
         }
     </style>
+    <!-- jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -270,10 +273,11 @@
                         <canvas id="signaturePad" width="320" height="100"
                             style="border:1px solid #bbb; border-radius:4px; background:#fff; cursor:crosshair;"></canvas>
                         <button type="button" id="clearSignature" style="margin-left:10px;">Clear</button>
+                        <button type="button" id="generatePreviewBtn" style="margin-left:10px;background:#3c7be6;color:#fff;padding:7px 18px;border:none;border-radius:5px;display:none;">Generate Preview</button>
                         <div id="signatureError" style="color:#d00; font-size:0.95em; margin-top:4px; display:none;">
                             Please provide your signature.</div>
                     </div>
-                    <button type="submit" id="submitBtn" class="hidden">Submit</button>
+                    
                 </div>
             </form>
         </div>
@@ -289,15 +293,27 @@
                 Role: Seller Acquisition / Field Sales / [Other Gig Role]
             </div>
         </div>
+        <!-- PDF Preview Modal -->
+        <div id="pdfModal" class="hidden" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999;">
+            <div style="background:#fff;padding:24px;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;position:relative;">
+                <button id="closeModal" style="position:absolute;top:8px;right:8px;">&times;</button>
+                <h3>PDF Preview</h3>
+                <iframe id="pdfFrame" style="width:400px;height:500px;border:1px solid #ccc;"></iframe>
+                <br>
+                <button id="finalSubmitBtn" style="margin-top:16px;background:#2a4d8f;color:#fff;padding:8px 18px;border:none;border-radius:5px;">Final Submit</button>
+            </div>
+        </div>
+        
     </div>
     <script>
-        const form = document.getElementById('workOrderForm');
-        const preview = document.getElementById('letterPreview');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
+    const form = document.getElementById('workOrderForm');
+    const preview = document.getElementById('letterPreview');
+    // Set today's date as default
+    document.getElementById('date').value = new Date().toISOString().slice(0, 10);
 
-        // Set today's date as default
-        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
-
-        function updatePreview() {
+    function updatePreview() {
             const workOrderNumber = document.getElementById('workOrderNumber').value || 'GIGSTM/WO/[UNIQUE-ID]';
             const date = document.getElementById('date').value || '[Insert Date, e.g., 12/07/2025]';
             const gigPartnerName = document.getElementById('gigPartnerName').value || '[Full Name]';
@@ -324,20 +340,29 @@ Role: ${role}`;
         const signatureContainer = document.getElementById('signatureContainer');
         const signaturePad = document.getElementById('signaturePad');
         const clearSignature = document.getElementById('clearSignature');
-        const submitBtn = document.getElementById('submitBtn');
+
         const signatureError = document.getElementById('signatureError');
         let drawing = false, hasSignature = false;
+        const generatePreviewBtn = document.getElementById('generatePreviewBtn');
 
         function showSignaturePad(show) {
             if (show) {
                 signatureContainer.classList.remove('hidden');
-                submitBtn.classList.remove('hidden');
+                updateGeneratePreviewBtn();
             } else {
                 signatureContainer.classList.add('hidden');
-                submitBtn.classList.add('hidden');
                 clearPad();
                 hasSignature = false;
-                submitBtn.disabled = true;
+                updateGeneratePreviewBtn();
+            }
+        }
+
+        function updateGeneratePreviewBtn() {
+            // Show button only if agreement checked and signature present
+            if (acceptAgreement.checked && hasSignature) {
+                generatePreviewBtn.style.display = '';
+            } else {
+                generatePreviewBtn.style.display = 'none';
             }
         }
 
@@ -349,10 +374,13 @@ Role: ${role}`;
             const ctx = signaturePad.getContext('2d');
             ctx.clearRect(0, 0, signaturePad.width, signaturePad.height);
             hasSignature = false;
-            submitBtn.disabled = true;
             signatureError.style.display = 'none';
         }
-        clearSignature.addEventListener('click', clearPad);
+        clearSignature.addEventListener('click', function() {
+            clearPad();
+            hasSignature = false;
+            updateGeneratePreviewBtn();
+        });
 
         // Drawing logic
         signaturePad.addEventListener('mousedown', function (e) {
@@ -366,8 +394,10 @@ Role: ${role}`;
             const ctx = signaturePad.getContext('2d');
             ctx.lineTo(e.offsetX, e.offsetY);
             ctx.stroke();
-            hasSignature = true;
-            submitBtn.disabled = false;
+            if (!hasSignature) {
+                hasSignature = true;
+                updateGeneratePreviewBtn();
+            }
         });
         window.addEventListener('mouseup', function () {
             drawing = false;
@@ -390,26 +420,114 @@ Role: ${role}`;
             const touch = e.touches[0];
             ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
             ctx.stroke();
-            hasSignature = true;
-            submitBtn.disabled = false;
+            if (!hasSignature) {
+                hasSignature = true;
+                updateGeneratePreviewBtn();
+            }
         });
         window.addEventListener('touchend', function () {
             drawing = false;
         });
 
-        // Prevent submit unless signature is present
-        form.addEventListener('submit', function (e) {
-            if (acceptAgreement.checked && !hasSignature) {
-                e.preventDefault();
-                signatureError.style.display = '';
-            } else {
-                signatureError.style.display = 'none';
-                alert('Form submitted successfully!');
-                // Here you can handle the form data and signature image (signaturePad.toDataURL())
-                e.preventDefault(); // Remove this line to allow actual submission
-            }
+        // --- PDF and Preview Logic ---
+        const previewBtn = document.getElementById('previewBtn');
+        const pdfModal = document.getElementById('pdfModal');
+        const pdfFrame = document.getElementById('pdfFrame');
+        const closeModal = document.getElementById('closeModal');
+        const finalSubmitBtn = document.getElementById('finalSubmitBtn');
+
+        let pdfBlobUrl = null;
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Gather form data
+            const workOrderNumber = document.getElementById('workOrderNumber').value || 'GIGSTM/WO/[UNIQUE-ID]';
+            const date = document.getElementById('date').value || '[Insert Date, e.g., 12/07/2025]';
+            const gigPartnerName = document.getElementById('gigPartnerName').value || '[Full Name]';
+            const partnerCode = document.getElementById('partnerCode').value || '[Code]';
+            const location = document.getElementById('location').value || '[City/Town, e.g., Jhansi]';
+            const aadhaar = document.getElementById('aadhaar').value || '[Details]';
+            const role = document.getElementById('role').value || '[Other Gig Role]';
+
+            let y = 15;
+            doc.setFontSize(14);
+            doc.text('Work Order – GigsTM Gig Partner', 10, y);
+            y += 12;
+            doc.setFontSize(11);
+            doc.text(`Work Order Number: ${workOrderNumber}`, 10, y); y += 8;
+            doc.text(`Date: ${date}`, 10, y); y += 8;
+            doc.text(`Gig Partner Name: ${gigPartnerName}`, 10, y); y += 8;
+            doc.text(`Partner Code: ${partnerCode}`, 10, y); y += 8;
+            doc.text(`Location Assigned: ${location}`, 10, y); y += 8;
+            doc.text(`Aadhaar / GST: ${aadhaar}`, 10, y); y += 8;
+            doc.text(`Role: ${role}`, 10, y); y += 12;
+
+            // Signature
+            doc.setFontSize(12);
+            doc.text('Signature:', 10, y);
+            // Convert signaturePad to image
+            const signatureImg = signaturePad.toDataURL('image/png');
+            doc.addImage(signatureImg, 'PNG', 35, y-6, 60, 20);
+
+            return doc;
+        }
+
+        // --- Generate HTML Letter Preview on Button Click ---
+        generatePreviewBtn.addEventListener('click', function () {
+            // Gather form data
+            const workOrderNumber = document.getElementById('workOrderNumber').value || 'GIGSTM/WO/[UNIQUE-ID]';
+            const date = document.getElementById('date').value || '[Insert Date, e.g., 12/07/2025]';
+            const gigPartnerName = document.getElementById('gigPartnerName').value || '[Full Name]';
+            const partnerCode = document.getElementById('partnerCode').value || '[Code]';
+            const location = document.getElementById('location').value || '[City/Town, e.g., Jhansi]';
+            const aadhaar = document.getElementById('aadhaar').value || '[Details]';
+            const role = document.getElementById('role').value || '[Other Gig Role]';
+            const signatureImg = signaturePad.toDataURL('image/png');
+            // Compose letter HTML
+            const letterHTML = `
+                <div style="font-family:Poppins,sans-serif;padding:24px;background:#fff;border-radius:10px;box-shadow:0 1px 5px rgba(44,77,143,0.06);max-width:500px;">
+                    <div style="font-size:1.2em;font-weight:600;margin-bottom:10px;">Work Order – GigsTM Gig Partner</div>
+                    <div><b>Work Order Number:</b> ${workOrderNumber}</div>
+                    <div><b>Date:</b> ${date}</div>
+                    <div><b>Gig Partner Name:</b> ${gigPartnerName}</div>
+                    <div><b>Partner Code:</b> ${partnerCode}</div>
+                    <div><b>Location Assigned:</b> ${location}</div>
+                    <div><b>Aadhaar / GST:</b> ${aadhaar}</div>
+                    <div><b>Role:</b> ${role}</div>
+                    <div style="margin-top:18px;"><b>Digital Signature:</b><br><img src="${signatureImg}" style="border:1px solid #bbb;border-radius:4px;max-width:220px;max-height:60px;background:#fff;"/></div>
+                    <button id="finalSubmitBtn" style="margin-top:20px;background:#2a4d8f;color:#fff;padding:10px 22px;border:none;border-radius:6px;width:100%;font-size:1.05em;">Submit</button>
+                </div>
+            `;
+            preview.innerHTML = letterHTML;
+            // Attach event listener for the new submit button
+            const finalSubmitBtn = document.getElementById('finalSubmitBtn');
+            finalSubmitBtn.addEventListener('click', function() {
+                alert('Work Order submitted successfully!');
+                form.reset();
+                preview.innerHTML = '';
+                clearPad();
+                hasSignature = false;
+                updateGeneratePreviewBtn();
+            });
         });
-    </script>
+
+        closeModal.addEventListener('click', function() {
+            pdfModal.classList.add('hidden');
+        });
+
+        finalSubmitBtn.addEventListener('click', function() {
+            pdfModal.classList.add('hidden');
+            // Here you can handle the final PDF (e.g., upload, send, etc.)
+            alert('Work Order submitted successfully!');
+            form.reset();
+            updatePreview();
+            clearPad();
+            showSignaturePad(false);
+        });
+});
+</script>
 </body>
 
 </html>

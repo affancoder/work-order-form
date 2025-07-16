@@ -1,163 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Work Order – GigsTM Gig Partner</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css">  <!-- SignaturePad CDN -->
-    <style>
-      #pv_additionalInfo img, #pv_payoutTerms img {
-        max-width: 120px;
-        max-height: 60px;
-        height: auto;
-        width: auto;
-        display: inline-block;
-        margin: 4px 0;
-      }
-    </style>
-    <!-- Quill Rich Text Editor CDN -->
-    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
-  </head>
 
-  <body>
-    <div class="container">
-      <div class="form-section">
-        <div>
-          <img src="logo1.png" class="logo-img" alt="GigsTM Logo" />
-          <hr>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work Order – GigsTM Gig Partner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css"> <!-- SignaturePad CDN -->
+  <style>
+    #pv_additionalInfo img,
+    #pv_payoutTerms img {
+      max-width: 120px;
+      max-height: 60px;
+      height: auto;
+      width: auto;
+      display: inline-block;
+      margin: 4px 0;
+    }
+  </style>
+  <!-- Quill Rich Text Editor CDN -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="form-section">
+      <div>
+        <img src="logo1.png" class="logo-img" alt="GigsTM Logo" />
+        <hr>
+      </div>
+    </div>
+    <h2>Work Order Details</h2>
+    <form id="workOrderForm" autocomplete="off">
+      <label for="workOrderNumber">Work Order Number</label>
+      <input type="text" id="workOrderNumber" placeholder="e.g., GIGSTM/WO/12345" required />
+
+      <label for="date">Date</label>
+      <input type="date" id="date" required />
+
+      <label for="gigPartnerName">Gig Partner Name</label>
+      <input type="text" id="gigPartnerName" placeholder="Full Name" required />
+
+      <label for="partnerCode">Partner Code</label>
+      <input type="text" id="partnerCode" placeholder="e.g., GTM123" required />
+
+      <label for="location">Location Assigned</label>
+      <input type="text" id="location" placeholder="e.g., Jhansi" required />
+
+      <label for="aadhaar">Aadhaar / GST</label>
+      <input type="text" id="aadhaar" placeholder="Aadhaar or GST Details" required />
+
+      <label for="scopeOfWork">Scope of Work</label>
+      <div id="quill_scopeOfWork" style="height:120px;margin-bottom:20px;"></div>
+
+      <label for="payoutTerms">Payout Terms</label>
+      <div id="quill_payoutTerms" style="height:120px;margin-bottom:20px;"></div>
+
+      <label for="role">Role</label>
+      <select id="role" required>
+        <option value="">-- Select Role --</option>
+        <option>Seller Acquisition</option>
+        <option>Field Sales</option>
+        <option>Other Gig Role</option>
+      </select>
+
+      <div class="agreement-block">
+        <div class="agreement-row">
+          <input type="checkbox" id="acceptAgreement" />
+          <label for="acceptAgreement">I accept the agreement</label>
         </div>
-        </div>
-        <h2>Work Order Details</h2>
-        <form id="workOrderForm" autocomplete="off">
-          <label for="workOrderNumber">Work Order Number</label>
-          <input
-            type="text"
-            id="workOrderNumber"
-            placeholder="e.g., GIGSTM/WO/12345"
-            required
-          />
+      </div>
 
-          <label for="date">Date</label>
-          <input type="date" id="date" required />
-
-          <label for="gigPartnerName">Gig Partner Name</label>
-          <input
-            type="text"
-            id="gigPartnerName"
-            placeholder="Full Name"
-            required
-          />
-
-          <label for="partnerCode">Partner Code</label>
-          <input
-            type="text"
-            id="partnerCode"
-            placeholder="e.g., GTM123"
-            required
-          />
-
-          <label for="location">Location Assigned</label>
-          <input
-            type="text"
-            id="location"
-            placeholder="e.g., Jhansi"
-            required
-          />
-
-          <label for="aadhaar">Aadhaar / GST</label>
-          <input
-            type="text"
-            id="aadhaar"
-            placeholder="Aadhaar or GST Details"
-            required
-          />
-
-          <label for="scopeOfWork">Scope of Work</label>
-          <div id="quill_scopeOfWork" style="height:120px;margin-bottom:20px;"></div>
-
-          <label for="payoutTerms">Payout Terms</label>
-          <div id="quill_payoutTerms" style="height:120px;margin-bottom:20px;"></div>
-
-          <label for="role">Role</label>
-          <select id="role" required>
-            <option value="">-- Select Role --</option>
-            <option>Seller Acquisition</option>
-            <option>Field Sales</option>
-            <option>Other Gig Role</option>
-          </select>
-
-          <div class="agreement-block">
-            <div class="agreement-row">
-              <input type="checkbox" id="acceptAgreement" />
-              <label for="acceptAgreement">I accept the agreement</label>
-            </div>
-          </div>
-
-          <div id="signatureContainer">
-            <label
-              style="
+      <div id="signatureContainer">
+        <label style="
                 font-weight: 500;
                 color: #2a4d8f;
                 margin-bottom: 10px;
                 display: block;
-              "
-              >Digital Signature</label
-            >
-            <canvas id="signaturePad" width="400" height="150"></canvas>
-            <div class="signature-buttons">
-              <button type="button" id="clearSignature">Clear Signature</button>
-              <button
-                type="button"
-                id="generatePreviewBtn"
-                style="display: none"
-              >
-                Generate Preview
-              </button>
-            </div>
-            <div id="signatureError">Please provide your signature.</div>
-          </div>
-        </form>
+              ">Digital Signature</label>
+        <canvas id="signaturePad" width="400" height="150"></canvas>
+        <div class="signature-buttons">
+          <button type="button" id="clearSignature">Clear Signature</button>
+          <button type="button" id="generatePreviewBtn" style="display: none">
+            Generate Preview
+          </button>
+        </div>
+        <div id="signatureError">Please provide your signature.</div>
       </div>
+    </form>
+  </div>
 
-      <div class="letter-section">
-        <div class="letter-title">Work Order – GigsTM Gig Partner</div>
-        <div class="letter" id="letterPreview">
-          <div>
-            <!-- <img src="logo1.png" class="logo-img" alt="GigsTM Logo" /> -->
-          </div>
-          <div>
-            <b>Work Order Number:</b>
-            <span id="pv_workOrderNumber">GIGSTM/WO/[UNIQUE-ID]</span>
-          </div>
-          <div>
-            <b>Date:</b>
-            <span id="pv_date">[Insert Date, e.g., 12/07/2025]</span>
-          </div>
-          <div>
-            <b>Gig Partner Name:</b>
-            <span id="pv_gigPartnerName">[Full Name]</span>
-          </div>
-          <div>
-            <b>Partner Code:</b> <span id="pv_partnerCode">[Code]</span>
-          </div>
-          <div>
-            <b>Location Assigned:</b>
-            <span id="pv_location">[City/Town, e.g., Jhansi]</span>
-          </div>
-          <div>
-            <b>Aadhaar / GST:</b> <span id="pv_aadhaar">[Details]</span>
-          </div>
-          <div><b>Role:</b> <span id="pv_role">[Other Gig Role]</span></div>
-          <div><b>Scope of Work:</b> <span id="pv_scopeOfWork">[None]</span><br><img id="pv_scopeOfWorkImg" style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Scope of Work Image" /></div>
-          <div><b>Payout Terms:</b> <span id="pv_payoutTerms">[None]</span><br><img id="pv_payoutTermsImg" style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Payout Terms Image" /></div>
-          <hr style="margin: 18px 0" />
-          <div class="section-title">Scope of Work:</div>
+  <div class="letter-section">
+    <div class="letter-title">Work Order – GigsTM Gig Partner</div>
+    <div class="letter" id="letterPreview">
+      <div>
+        <!-- <img src="logo1.png" class="logo-img" alt="GigsTM Logo" /> -->
+      </div>
+      <div>
+        <b>Work Order Number:</b>
+        <span id="pv_workOrderNumber">GIGSTM/WO/[UNIQUE-ID]</span>
+      </div>
+      <div>
+        <b>Date:</b>
+        <span id="pv_date">[Insert Date, e.g., 12/07/2025]</span>
+      </div>
+      <div>
+        <b>Gig Partner Name:</b>
+        <span id="pv_gigPartnerName">[Full Name]</span>
+      </div>
+      <div>
+        <b>Partner Code:</b> <span id="pv_partnerCode">[Code]</span>
+      </div>
+      <div>
+        <b>Location Assigned:</b>
+        <span id="pv_location">[City/Town, e.g., Jhansi]</span>
+      </div>
+      <div>
+        <b>Aadhaar / GST:</b> <span id="pv_aadhaar">[Details]</span>
+      </div>
+      <div><b>Role:</b> <span id="pv_role">[Other Gig Role]</span></div>
+      <div><b>Scope of Work:</b> <span id="pv_scopeOfWork">[None]</span><br><img id="pv_scopeOfWorkImg"
+          style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Scope of Work Image" /></div>
+      <div><b>Payout Terms:</b> <span id="pv_payoutTerms">[None]</span><br><img id="pv_payoutTermsImg"
+          style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Payout Terms Image" /></div>
+      <hr style="margin: 18px 0" />
+      <!-- <div class="section-title">Scope of Work:</div>
           <ol style="margin-left: 18px">
             <li>Identify and approach local merchants or small medium enterprises
               (SMEs).
@@ -173,8 +142,8 @@
             </li>
             <li>Ensure the merchant account is registered and catalog is live.
             </li>
-          </ol>
-          <div class="section-title">Payout Structure:</div>
+          </ol> -->
+      <!-- <div class="section-title">Payout Structure:</div>
           <table class="payout-table">
             <tr>
               <th>Milestone</th>
@@ -196,347 +165,333 @@
               <td>5th Order Fulfilled within 45 Days/Goal 4</td>
               <td>₹1000</td>
             </tr>
-          </table>
-          <div class="note">
+          </table> -->
+      <!-- <div class="note">
             * Fraudulent Onboarding Penalty: ₹2000 per case
-          </div>
-          <div class="section-title" >Payment Cycle:</div>
-          <ul style="margin-left: 18px">
-            <li>Payouts will be processed on a monthly basis.</li>
-            <li>For example: Work completed between 1st–31st July 2025 will be
-              paid by 10th August 2025.
-            </li>
-            <li>Timelines may vary project to project based on client approval
-              cycles.
-            </li>
-          </ul>
-          <hr style="margin: 18px 0" />
-            <img src="logo1.png" class="logo-img" alt="GigsTM Logo" />  
-        </div>
-          <div style="margin-bottom: 4px">
-            Registered Office: 0 Vijay Nagar, Piriya Khodan, Sipri Bazar,
-            Jhansi, Uttar Pradesh – 284003
-          </div>
-          <div>CIN: U78300UP2023PTC221057</div>
-          <ul style="margin: 12px 0 8px 18px; font-size: 0.98rem">
-            <li>
-              For active and verified partners, validated reports may qualify
-              for faster payouts within 48 hours, subject to approval.
-            </li>
-          </ul>
-          <div class="section-title">Terms & Conditions:</div>
-          <ol class="terms-list">
-            <li>
-              Engagement Type: This work order is on a contractual/gig basis and
-              does not constitute an employer/employee relationship.
-            </li>
-            <li>
-              Payment Terms: Payouts are made per successful milestone as
-              outlined in the Payout Structure. No payment for incomplete or
-              rejected tasks.
-            </li>
-            <li>
-              Taxes and Deductions: Applicable taxes/TDS will be deducted as per
-              Indian law.
-            </li>
-            <li>
-              No Third-Party: The Gig Partner may not outsource, subcontract or
-              assign this work order to a third party.
-            </li>
-            <li>
-              Fraudulent Activities: Any fraudulent onboarding or
-              misrepresentation will result in immediate termination and a
-              penalty of 2000 per case.
-            </li>
-            <li>
-              Verification Rights: GigsTM reserves the right to verify all tasks
-              and approve payouts based on validation and reporting.
-            </li>
-            <li>
-              Non-Compete: The Gig Partner must not work for similar tasks until
-              ongoing project, including onboarding and catalog activation, is
-              completed and settled.
-            </li>
-            <li>
-              Guidelines: The Gig Partner will have access to scripts,
-              onboarding checklists, and standard operating procedures for
-              seller acquisition.
-            </li>
-            <li>
-              Data Protection: All data shared must be kept confidential as per
-              GigsTM's data policies and Indian data protection laws (e.g., DPDP
-              Act, 2023) with no unauthorized sharing.
-            </li>
-            <li>
-              Non-Completion: Effectively unfulfilled targets or tasks will not
-              be paid and, for verified partners, late reports may delay payouts
-              for up to 15 days.
-            </li>
-            <li>
-              Termination: Either party may terminate this work order with 15
-              days' advance notice.
-            </li>
-            <li>
-              Governing Law: This work order is governed by the laws of India,
-              with exclusive jurisdiction in the courts of Jhansi.
-            </li>
-            <li>
-              Miscellaneous: The terms and rights in this work order shall be
-              enforced through appropriate legal channels. This work order is
-              governed by the Indian Contract Act, 1996.
-            </li>
-            <li>
-              Severability: If any provision is found invalid, the rest shall
-              remain enforceable.
-            </li>
-          </ol>
-          <div class="section-title">Signatures:</div>
-          <div
-            style="
+          </div> -->
+      <div class="section-title">Payment Cycle:</div>
+      <ul style="margin-left: 18px">
+        <li>Payouts will be processed on a monthly basis.</li>
+        <li>For example: Work completed between 1st–31st July 2025 will be
+          paid by 10th August 2025.
+        </li>
+        <li>Timelines may vary project to project based on client approval
+          cycles.
+        </li>
+      </ul>
+      <hr style="margin: 18px 0" />
+      <img src="logo1.png" class="logo-img" alt="GigsTM Logo" />
+    </div>
+    <div style="margin-bottom: 4px">
+      Registered Office: 0 Vijay Nagar, Piriya Khodan, Sipri Bazar,
+      Jhansi, Uttar Pradesh – 284003
+    </div>
+    <div>CIN: U78300UP2023PTC221057</div>
+    <ul style="margin: 12px 0 8px 18px; font-size: 0.98rem">
+      <li>
+        For active and verified partners, validated reports may qualify
+        for faster payouts within 48 hours, subject to approval.
+      </li>
+    </ul>
+    <div class="section-title">Terms & Conditions:</div>
+    <ol class="terms-list">
+      <li>
+        Engagement Type: This work order is on a contractual/gig basis and
+        does not constitute an employer/employee relationship.
+      </li>
+      <li>
+        Payment Terms: Payouts are made per successful milestone as
+        outlined in the Payout Structure. No payment for incomplete or
+        rejected tasks.
+      </li>
+      <li>
+        Taxes and Deductions: Applicable taxes/TDS will be deducted as per
+        Indian law.
+      </li>
+      <li>
+        No Third-Party: The Gig Partner may not outsource, subcontract or
+        assign this work order to a third party.
+      </li>
+      <li>
+        Fraudulent Activities: Any fraudulent onboarding or
+        misrepresentation will result in immediate termination and a
+        penalty of 2000 per case.
+      </li>
+      <li>
+        Verification Rights: GigsTM reserves the right to verify all tasks
+        and approve payouts based on validation and reporting.
+      </li>
+      <li>
+        Non-Compete: The Gig Partner must not work for similar tasks until
+        ongoing project, including onboarding and catalog activation, is
+        completed and settled.
+      </li>
+      <li>
+        Guidelines: The Gig Partner will have access to scripts,
+        onboarding checklists, and standard operating procedures for
+        seller acquisition.
+      </li>
+      <li>
+        Data Protection: All data shared must be kept confidential as per
+        GigsTM's data policies and Indian data protection laws (e.g., DPDP
+        Act, 2023) with no unauthorized sharing.
+      </li>
+      <li>
+        Non-Completion: Effectively unfulfilled targets or tasks will not
+        be paid and, for verified partners, late reports may delay payouts
+        for up to 15 days.
+      </li>
+      <li>
+        Termination: Either party may terminate this work order with 15
+        days' advance notice.
+      </li>
+      <li>
+        Governing Law: This work order is governed by the laws of India,
+        with exclusive jurisdiction in the courts of Jhansi.
+      </li>
+      <li>
+        Miscellaneous: The terms and rights in this work order shall be
+        enforced through appropriate legal channels. This work order is
+        governed by the Indian Contract Act, 1996.
+      </li>
+      <li>
+        Severability: If any provision is found invalid, the rest shall
+        remain enforceable.
+      </li>
+    </ol>
+    <div class="section-title">Signatures:</div>
+    <div style="
               display: flex;
               justify-content: space-between;
               margin-top: 24px;
-            "
-          >
-            <div>
-              <div style="font-weight: 500">
-                On behalf of GigsTM World Private Limited:
-              </div>
-              <div style="margin: 18px 0 6px 0">
-                Mohammad Rahbar Khan<br /><span style="font-size: 0.98rem"
-                  >Managing Director</span
-                >
-              </div>
-              <div style="font-size: 0.97rem">GigsTM World Pvt. Ltd.</div>
-            </div>
-            <div>
-              <div style="font-weight: 500">Signature of Gig Partner</div>
-              <div
-                id="pv_signature_block"
-                style="
+            ">
+      <div>
+        <div style="font-weight: 500">
+          On behalf of GigsTM World Private Limited:
+        </div>
+        <div style="margin: 18px 0 6px 0">
+          Mohammad Rahbar Khan<br /><span style="font-size: 0.98rem">Managing Director</span>
+        </div>
+        <div style="font-size: 0.97rem">GigsTM World Pvt. Ltd.</div>
+      </div>
+      <div>
+        <div style="font-weight: 500">Signature of Gig Partner</div>
+        <div id="pv_signature_block" style="
                   min-height: 80px;
                   margin-bottom: 6px;
                   padding: 10px;
                   border: 1px solid #ddd;
                   border-radius: 6px;
                   background: #f9f9f9;
-                "
-              >
-                <img
-                  id="pv_signature"
-                  style="max-width: 180px; max-height: 60px; display: none"
-                  alt="Signature Preview"
-                />
-                <div
-                  id="pv_signature_placeholder"
-                  style="color: #999; font-style: italic"
-                >
-                  Signature will appear here
-                </div>
-              </div>
-              <div style="margin: 18px 0 6px 0">
-                Partner Name: <span id="pv_gigPartnerName2">[Insert Name]</span>
-              </div>
-              <div>
-                Partner Code: <span id="pv_partnerCode2">[Insert Code]</span>
-              </div>
-              <div>Date: <span id="pv_date2">[Insert Date]</span></div>
-            </div>
-          </div>
-          <div class="footer" style="margin-top: 26px">
-            <span>www.gigstm.com</span> | <span>contact@gigstm.com</span> |
-            <span>+91-7081266668</span>
-            <hr />
-            0 Vijay Nagar, Piriya Khodan, Sipri Bazar, Jhansi, Uttar Pradesh –
-            284003
+                ">
+          <img id="pv_signature" style="max-width: 180px; max-height: 60px; display: none" alt="Signature Preview" />
+          <div id="pv_signature_placeholder" style="color: #999; font-style: italic">
+            Signature will appear here
           </div>
         </div>
+        <div style="margin: 18px 0 6px 0">
+          Partner Name: <span id="pv_gigPartnerName2">[Insert Name]</span>
+        </div>
+        <div>
+          Partner Code: <span id="pv_partnerCode2">[Insert Code]</span>
+        </div>
+        <div>Date: <span id="pv_date2">[Insert Date]</span></div>
       </div>
     </div>
+    <hr />
+    <div class="footer" style="margin-top: 26px">
+      <div>www.gigstm.com</div>
+      <div>hello@gigstm.com</div>
+      <div>+91-7081266668</div>
+    </div>
+  </div>
+  </div>
+  </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Initialize Quill editors
-        window.quillScopeOfWork = new Quill('#quill_scopeOfWork', {
-          theme: 'snow',
-          modules: {
-            toolbar: [
-              ['bold', 'italic', 'underline', 'strike'],
-              [{ 'header': 1 }, { 'header': 2 }],
-              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-              ['link', 'image'],
-              [{ 'align': [] }],
-              ['clean']
-            ]
-          }
-        });
-        window.quillPayoutTerms = new Quill('#quill_payoutTerms', {
-          theme: 'snow',
-          modules: {
-            toolbar: [
-              ['bold', 'italic', 'underline', 'strike'],
-              [{ 'header': 1 }, { 'header': 2 }],
-              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-              ['link', 'image'],
-              [{ 'align': [] }],
-              ['clean']
-            ]
-          }
-        });
-        window.quillScopeOfWork.on('text-change', updatePreview);
-        window.quillPayoutTerms.on('text-change', updatePreview);
-        console.log("DOM fully loaded and parsed");
-
-        // Initialize elements
-        const form = document.getElementById("workOrderForm");
-        const acceptAgreement = document.getElementById("acceptAgreement");
-        const signaturePadCanvas = document.getElementById("signaturePad");
-        const clearSignatureBtn = document.getElementById("clearSignature");
-        const generatePreviewBtn =
-          document.getElementById("generatePreviewBtn");
-        const signatureError = document.getElementById("signatureError");
-
-        // Set today's date as default
-        document.getElementById("date").value = new Date()
-          .toISOString()
-          .slice(0, 10);
-
-        // Initialize SignaturePad
-        const signaturePad = new SignaturePad(signaturePadCanvas, {
-          backgroundColor: "#ffffff",
-          penColor: "#2a4d8f",
-          minWidth: 1,
-          maxWidth: 3,
-          throttle: 16,
-          minDistance: 5,
-        });
-
-        // Track signature state
-        let hasSignature = false;
-
-        // Update letter preview section
-        function updatePreview() {
-          const workOrderNumber =
-            document.getElementById("workOrderNumber").value ||
-            "GIGSTM/WO/[UNIQUE-ID]";
-          const date =
-            document.getElementById("date").value ||
-            "[Insert Date, e.g., 12/07/2025]";
-          const gigPartnerName =
-            document.getElementById("gigPartnerName").value || "[Full Name]";
-          const partnerCode =
-            document.getElementById("partnerCode").value || "[Code]";
-          const location =
-            document.getElementById("location").value ||
-            "[City/Town, e.g., Jhansi]";
-          const aadhaar =
-            document.getElementById("aadhaar").value || "[Details]";
-          const role =
-            document.getElementById("role").value || "[Other Gig Role]";
-
-          document.getElementById("pv_workOrderNumber").textContent =
-            workOrderNumber;
-          document.getElementById("pv_date").textContent = date;
-          document.getElementById("pv_gigPartnerName").textContent =
-            gigPartnerName;
-          document.getElementById("pv_partnerCode").textContent = partnerCode;
-          document.getElementById("pv_location").textContent = location;
-          document.getElementById("pv_aadhaar").textContent = aadhaar;
-          document.getElementById("pv_role").textContent = role;
-  // Set preview HTML from Quill editors
-  var scopeOfWorkHtml = window.quillScopeOfWork ? window.quillScopeOfWork.root.innerHTML.trim() : '';
-  var payoutHtml = window.quillPayoutTerms ? window.quillPayoutTerms.root.innerHTML.trim() : '';
-  document.getElementById("pv_scopeOfWork").innerHTML = scopeOfWorkHtml && scopeOfWorkHtml !== '<p><br></p>' ? scopeOfWorkHtml : '[None]';
-  document.getElementById("pv_payoutTerms").innerHTML = payoutHtml && payoutHtml !== '<p><br></p>' ? payoutHtml : '[None]';
-
-          document.getElementById("pv_gigPartnerName2").textContent =
-            gigPartnerName;
-          document.getElementById("pv_partnerCode2").textContent = partnerCode;
-          document.getElementById("pv_date2").textContent = date;
-
-          updateSignaturePreview();
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Initialize Quill editors
+      window.quillScopeOfWork = new Quill('#quill_scopeOfWork', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image'],
+            [{ 'align': [] }],
+            ['clean']
+          ]
         }
-
-        // Update signature preview block
-        function updateSignaturePreview() {
-          const pvSignature = document.getElementById("pv_signature");
-          const pvSignaturePlaceholder = document.getElementById(
-            "pv_signature_placeholder"
-          );
-
-          if (!signaturePad.isEmpty()) {
-            pvSignature.src = signaturePad.toDataURL();
-            pvSignature.style.display = "block";
-            pvSignaturePlaceholder.style.display = "none";
-          } else {
-            pvSignature.style.display = "none";
-            pvSignaturePlaceholder.style.display = "block";
-          }
-        }
-
-        // Show/hide Generate Preview button
-        function updateGeneratePreviewBtn() {
-          const agreementChecked = acceptAgreement.checked;
-          const signatureExists = !signaturePad.isEmpty();
-
-          if (agreementChecked && signatureExists) {
-            generatePreviewBtn.style.display = "inline-block";
-            signatureError.style.display = "none";
-          } else {
-            generatePreviewBtn.style.display = "none";
-          }
-        }
-
-        // Detect signature end on canvas (mouse & touch)
-        signaturePadCanvas.addEventListener("mouseup", () => {
-          if (!signaturePad.isEmpty()) {
-            hasSignature = true;
-            updateSignaturePreview();
-            updateGeneratePreviewBtn();
-          }
-        });
-
-        signaturePadCanvas.addEventListener("touchend", () => {
-          if (!signaturePad.isEmpty()) {
-            hasSignature = true;
-            updateSignaturePreview();
-            updateGeneratePreviewBtn();
-          }
-        });
-
-        // Clear signature
-        clearSignatureBtn.addEventListener("click", function () {
-          signaturePad.clear();
-          hasSignature = false;
-          updateSignaturePreview();
-          updateGeneratePreviewBtn();
-          signatureError.style.display = "none";
-        });
-
-        // Agreement checkbox toggle
-        acceptAgreement.addEventListener("change", function () {
-          updateGeneratePreviewBtn();
-        });
-
-        // Update preview when form inputs change
-        [
-          "workOrderNumber",
-          "date",
-          "gigPartnerName",
-          "partnerCode",
-          "location",
-          "aadhaar",
-          "role",
-        ].forEach((id) => {
-          document.getElementById(id).addEventListener("input", updatePreview);
-        });
-
-        // Optional: Generate preview button click action
-        generatePreviewBtn.addEventListener("click", function () {
-          updatePreview();
-          alert("Preview updated successfully!");
-        });
       });
-    </script>
-  </body>
+      window.quillPayoutTerms = new Quill('#quill_payoutTerms', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image'],
+            [{ 'align': [] }],
+            ['clean']
+          ]
+        }
+      });
+      window.quillScopeOfWork.on('text-change', updatePreview);
+      window.quillPayoutTerms.on('text-change', updatePreview);
+      console.log("DOM fully loaded and parsed");
+
+      // Initialize elements
+      const form = document.getElementById("workOrderForm");
+      const acceptAgreement = document.getElementById("acceptAgreement");
+      const signaturePadCanvas = document.getElementById("signaturePad");
+      const clearSignatureBtn = document.getElementById("clearSignature");
+      const generatePreviewBtn =
+        document.getElementById("generatePreviewBtn");
+      const signatureError = document.getElementById("signatureError");
+
+      // Set today's date as default
+      document.getElementById("date").value = new Date()
+        .toISOString()
+        .slice(0, 10);
+
+      // Initialize SignaturePad
+      const signaturePad = new SignaturePad(signaturePadCanvas, {
+        backgroundColor: "#ffffff",
+        penColor: "#2a4d8f",
+        minWidth: 1,
+        maxWidth: 3,
+        throttle: 16,
+        minDistance: 5,
+      });
+
+      // Track signature state
+      let hasSignature = false;
+
+      // Update letter preview section
+      function updatePreview() {
+        const workOrderNumber =
+          document.getElementById("workOrderNumber").value ||
+          "GIGSTM/WO/[UNIQUE-ID]";
+        const date =
+          document.getElementById("date").value ||
+          "[Insert Date, e.g., 12/07/2025]";
+        const gigPartnerName =
+          document.getElementById("gigPartnerName").value || "[Full Name]";
+        const partnerCode =
+          document.getElementById("partnerCode").value || "[Code]";
+        const location =
+          document.getElementById("location").value ||
+          "[City/Town, e.g., Jhansi]";
+        const aadhaar =
+          document.getElementById("aadhaar").value || "[Details]";
+        const role =
+          document.getElementById("role").value || "[Other Gig Role]";
+
+        document.getElementById("pv_workOrderNumber").textContent =
+          workOrderNumber;
+        document.getElementById("pv_date").textContent = date;
+        document.getElementById("pv_gigPartnerName").textContent =
+          gigPartnerName;
+        document.getElementById("pv_partnerCode").textContent = partnerCode;
+        document.getElementById("pv_location").textContent = location;
+        document.getElementById("pv_aadhaar").textContent = aadhaar;
+        document.getElementById("pv_role").textContent = role;
+        // Set preview HTML from Quill editors
+        var scopeOfWorkHtml = window.quillScopeOfWork ? window.quillScopeOfWork.root.innerHTML.trim() : '';
+        var payoutHtml = window.quillPayoutTerms ? window.quillPayoutTerms.root.innerHTML.trim() : '';
+        document.getElementById("pv_scopeOfWork").innerHTML = scopeOfWorkHtml && scopeOfWorkHtml !== '<p><br></p>' ? scopeOfWorkHtml : '[None]';
+        document.getElementById("pv_payoutTerms").innerHTML = payoutHtml && payoutHtml !== '<p><br></p>' ? payoutHtml : '[None]';
+
+        document.getElementById("pv_gigPartnerName2").textContent =
+          gigPartnerName;
+        document.getElementById("pv_partnerCode2").textContent = partnerCode;
+        document.getElementById("pv_date2").textContent = date;
+
+        updateSignaturePreview();
+      }
+
+      // Update signature preview block
+      function updateSignaturePreview() {
+        const pvSignature = document.getElementById("pv_signature");
+        const pvSignaturePlaceholder = document.getElementById(
+          "pv_signature_placeholder"
+        );
+
+        if (!signaturePad.isEmpty()) {
+          pvSignature.src = signaturePad.toDataURL();
+          pvSignature.style.display = "block";
+          pvSignaturePlaceholder.style.display = "none";
+        } else {
+          pvSignature.style.display = "none";
+          pvSignaturePlaceholder.style.display = "block";
+        }
+      }
+
+      // Show/hide Generate Preview button
+      function updateGeneratePreviewBtn() {
+        const agreementChecked = acceptAgreement.checked;
+        const signatureExists = !signaturePad.isEmpty();
+
+        if (agreementChecked && signatureExists) {
+          generatePreviewBtn.style.display = "inline-block";
+          signatureError.style.display = "none";
+        } else {
+          generatePreviewBtn.style.display = "none";
+        }
+      }
+
+      // Detect signature end on canvas (mouse & touch)
+      signaturePadCanvas.addEventListener("mouseup", () => {
+        if (!signaturePad.isEmpty()) {
+          hasSignature = true;
+          updateSignaturePreview();
+          updateGeneratePreviewBtn();
+        }
+      });
+
+      signaturePadCanvas.addEventListener("touchend", () => {
+        if (!signaturePad.isEmpty()) {
+          hasSignature = true;
+          updateSignaturePreview();
+          updateGeneratePreviewBtn();
+        }
+      });
+
+      // Clear signature
+      clearSignatureBtn.addEventListener("click", function () {
+        signaturePad.clear();
+        hasSignature = false;
+        updateSignaturePreview();
+        updateGeneratePreviewBtn();
+        signatureError.style.display = "none";
+      });
+
+      // Agreement checkbox toggle
+      acceptAgreement.addEventListener("change", function () {
+        updateGeneratePreviewBtn();
+      });
+
+      // Update preview when form inputs change
+      [
+        "workOrderNumber",
+        "date",
+        "gigPartnerName",
+        "partnerCode",
+        "location",
+        "aadhaar",
+        "role",
+      ].forEach((id) => {
+        document.getElementById(id).addEventListener("input", updatePreview);
+      });
+
+      // Optional: Generate preview button click action
+      generatePreviewBtn.addEventListener("click", function () {
+        updatePreview();
+        alert("Preview updated successfully!");
+      });
+    });
+  </script>
+</body>
+
 </html>

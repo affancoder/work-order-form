@@ -269,9 +269,11 @@ body {
   flex: 2;
   background: #fff;
   border-radius: 18px;
-  margin: 40px 200px;
+  /* margin: 40px 200px; */
   padding: 32px 28px;
   min-width: 320px;
+  width: 960px;
+  margin: auto;
   box-sizing: border-box;
   box-shadow: 0 2px 12px rgba(44, 77, 143, 0.07);
   border: 1.5px solid #e2e6f3;
@@ -422,7 +424,7 @@ select:focus {
 @media (max-width: 600px) {
   body {
     padding: 0;
-    margin: 0;
+    margin: 10px;
     background: #f8f9fa;
   }
 

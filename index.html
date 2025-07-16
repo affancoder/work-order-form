@@ -78,8 +78,8 @@
             required
           />
 
-          <label for="additionalInfo">Work Order Flow</label>
-          <div id="quill_additionalInfo" style="height:120px;margin-bottom:20px;"></div>
+          <label for="scopeOfWork">Scope of Work</label>
+          <div id="quill_scopeOfWork" style="height:120px;margin-bottom:20px;"></div>
 
           <label for="payoutTerms">Payout Terms</label>
           <div id="quill_payoutTerms" style="height:120px;margin-bottom:20px;"></div>
@@ -154,7 +154,7 @@
             <b>Aadhaar / GST:</b> <span id="pv_aadhaar">[Details]</span>
           </div>
           <div><b>Role:</b> <span id="pv_role">[Other Gig Role]</span></div>
-          <div><b>Work Order Flow:</b> <span id="pv_additionalInfo">[None]</span><br><img id="pv_additionalInfoImg" style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Work Order Flow Image" /></div>
+          <div><b>Scope of Work:</b> <span id="pv_scopeOfWork">[None]</span><br><img id="pv_scopeOfWorkImg" style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Scope of Work Image" /></div>
           <div><b>Payout Terms:</b> <span id="pv_payoutTerms">[None]</span><br><img id="pv_payoutTermsImg" style="max-width:100%;max-height:120px;display:none;margin-top:4px;" alt="Payout Terms Image" /></div>
           <hr style="margin: 18px 0" />
           <div class="section-title">Scope of Work:</div>
@@ -357,7 +357,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // Initialize Quill editors
-        window.quillAdditionalInfo = new Quill('#quill_additionalInfo', {
+        window.quillScopeOfWork = new Quill('#quill_scopeOfWork', {
           theme: 'snow',
           modules: {
             toolbar: [
@@ -383,7 +383,7 @@
             ]
           }
         });
-        window.quillAdditionalInfo.on('text-change', updatePreview);
+        window.quillScopeOfWork.on('text-change', updatePreview);
         window.quillPayoutTerms.on('text-change', updatePreview);
         console.log("DOM fully loaded and parsed");
 
@@ -444,9 +444,9 @@
           document.getElementById("pv_aadhaar").textContent = aadhaar;
           document.getElementById("pv_role").textContent = role;
   // Set preview HTML from Quill editors
-  var addInfoHtml = window.quillAdditionalInfo ? window.quillAdditionalInfo.root.innerHTML.trim() : '';
+  var scopeOfWorkHtml = window.quillScopeOfWork ? window.quillScopeOfWork.root.innerHTML.trim() : '';
   var payoutHtml = window.quillPayoutTerms ? window.quillPayoutTerms.root.innerHTML.trim() : '';
-  document.getElementById("pv_additionalInfo").innerHTML = addInfoHtml && addInfoHtml !== '<p><br></p>' ? addInfoHtml : '[None]';
+  document.getElementById("pv_scopeOfWork").innerHTML = scopeOfWorkHtml && scopeOfWorkHtml !== '<p><br></p>' ? scopeOfWorkHtml : '[None]';
   document.getElementById("pv_payoutTerms").innerHTML = payoutHtml && payoutHtml !== '<p><br></p>' ? payoutHtml : '[None]';
 
           document.getElementById("pv_gigPartnerName2").textContent =

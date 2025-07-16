@@ -80,7 +80,7 @@
                 color: #2a4d8f;
                 margin-bottom: 10px;
                 display: block;
-              ">Digital Signature</label>
+              ">Digital Signature <span style="font-weight:400;font-size:0.95em;">(Draw or Upload)</span></label>
         <canvas id="signaturePad" width="400" height="150"></canvas>
         <div class="signature-buttons">
           <button type="button" id="clearSignature">Clear Signature</button>
@@ -88,6 +88,8 @@
             Generate Preview
           </button>
         </div>
+        <div style="margin:12px 0 4px 0;text-align:center;font-size:0.97em;color:#888;">or</div>
+        <input type="file" id="signatureUpload" accept="image/*" style="display:block;margin:0 auto 10px auto;max-width:260px;" />
         <div id="signatureError">Please provide your signature.</div>
       </div>
     </form>
@@ -366,8 +368,29 @@
         minDistance: 5,
       });
 
-      // Track signature state
+      // Signature upload support
+      const signatureUpload = document.getElementById("signatureUpload");
+      let uploadedSignatureURL = null;
       let hasSignature = false;
+
+      signatureUpload.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            uploadedSignatureURL = event.target.result;
+            hasSignature = true;
+            signaturePad.clear(); // Clear drawn signature if any
+            updateSignaturePreview();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          uploadedSignatureURL = null;
+          hasSignature = false;
+          updateSignaturePreview();
+        }
+      });
+
 
       // Update letter preview section
       function updatePreview() {
@@ -423,6 +446,10 @@
           pvSignature.src = signaturePad.toDataURL();
           pvSignature.style.display = "block";
           pvSignaturePlaceholder.style.display = "none";
+        } else if (uploadedSignatureURL) {
+          pvSignature.src = uploadedSignatureURL;
+          pvSignature.style.display = "block";
+          pvSignaturePlaceholder.style.display = "none";
         } else {
           pvSignature.style.display = "none";
           pvSignaturePlaceholder.style.display = "block";
@@ -432,7 +459,7 @@
       // Show/hide Generate Preview button
       function updateGeneratePreviewBtn() {
         const agreementChecked = acceptAgreement.checked;
-        const signatureExists = !signaturePad.isEmpty();
+        const signatureExists = !signaturePad.isEmpty() || !!uploadedSignatureURL;
 
         if (agreementChecked && signatureExists) {
           generatePreviewBtn.style.display = "inline-block";
@@ -462,6 +489,8 @@
       // Clear signature
       clearSignatureBtn.addEventListener("click", function () {
         signaturePad.clear();
+        if (signatureUpload) signatureUpload.value = "";
+        uploadedSignatureURL = null;
         hasSignature = false;
         updateSignaturePreview();
         updateGeneratePreviewBtn();

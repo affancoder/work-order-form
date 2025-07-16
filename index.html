@@ -65,6 +65,12 @@
             required
           />
 
+          <label for="additionalInfo">Work Order Flow</label>
+          <textarea id="additionalInfo" placeholder="Enter the work order flow here" rows="3" style="width:100%;margin-bottom:20px;border-radius:8px;border:1.5px solid #e2e6f3;padding:14px 16px;font-size:1.08rem;background:#f9fafd;"></textarea>
+
+          <label for="payoutTerms">Payout Terms</label>
+          <textarea id="payoutTerms" placeholder="Enter the payout terms here" rows="3" style="width:100%;margin-bottom:20px;border-radius:8px;border:1.5px solid #e2e6f3;padding:14px 16px;font-size:1.08rem;background:#f9fafd;"></textarea>
+
           <label for="role">Role</label>
           <select id="role" required>
             <option value="">-- Select Role --</option>
@@ -135,6 +141,8 @@
             <b>Aadhaar / GST:</b> <span id="pv_aadhaar">[Details]</span>
           </div>
           <div><b>Role:</b> <span id="pv_role">[Other Gig Role]</span></div>
+          <div><b>Work Order Flow:</b> <span id="pv_additionalInfo">[None]</span></div>
+          <div><b>Payout Terms:</b> <span id="pv_payoutTerms">[None]</span></div>
           <hr style="margin: 18px 0" />
           <div class="section-title">Scope of Work:</div>
           <ol style="margin-left: 18px">
@@ -393,6 +401,8 @@
           document.getElementById("pv_location").textContent = location;
           document.getElementById("pv_aadhaar").textContent = aadhaar;
           document.getElementById("pv_role").textContent = role;
+  document.getElementById("pv_additionalInfo").textContent = document.getElementById("additionalInfo").value.trim() || "[None]";
+  document.getElementById("pv_payoutTerms").textContent = document.getElementById("payoutTerms").value.trim() || "[None]";
 
           document.getElementById("pv_gigPartnerName2").textContent =
             gigPartnerName;
